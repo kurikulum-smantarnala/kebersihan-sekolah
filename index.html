@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Penilaian Kinerja OB & Gardener - SMAN Taruna Nala Jatim</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eef2f6;--card:#fff;--ink:#0f2238;--mute:#64748b;--line:#e2e8f0;--soft:#f4f7fa;--pri:#12335c;--sea:#0f8a82;--brass:#e0a528;--r1:#dc4a4a;--r2:#e0a528;--r3:#1f9d6b}
+.dark{--bg:#0b1624;--card:#12223a;--ink:#e8eef6;--mute:#93a4b8;--line:#223653;--soft:#0f1d31;--pri:#5b9bea;--sea:#2cc4b8}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:Figtree,system-ui,sans-serif;transition:background .3s}
+h1,h2,h3,.disp{font-family:'Bricolage Grotesque',Figtree,sans-serif}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px}
+.inp{width:100%;padding:.6rem .8rem;border:1px solid var(--line);border-radius:10px;background:var(--soft);color:var(--ink);font-size:.875rem}
+.inp:focus,button:focus-visible{outline:2px solid var(--sea);outline-offset:1px}
+.lbl{font-size:.75rem;font-weight:700;color:var(--mute);margin-bottom:.4rem;display:block}
+.rate{flex:1;min-width:46px;padding:.55rem 0;border-radius:10px;border:1.5px solid var(--line);background:var(--card);font-weight:700;font-size:.9rem;color:var(--mute);transition:.15s}
+.rate:hover{transform:translateY(-1px)}
+.rate.on1{background:var(--r1);border-color:var(--r1);color:#fff}
+.rate.on2{background:var(--r2);border-color:var(--r2);color:#2b1d00}
+.rate.on3{background:var(--r3);border-color:var(--r3);color:#fff}
+.btn{padding:.6rem 1rem;border-radius:10px;font-weight:700;font-size:.8rem;transition:.15s;display:inline-flex;align-items:center;gap:.4rem}
+.btn-pri{background:var(--sea);color:#fff}.btn-pri:hover{filter:brightness(1.1)}.btn-pri:disabled{opacity:.6}
+.btn-ghost{border:1px solid var(--line);color:var(--ink);background:var(--card)}.btn-ghost:hover{background:var(--soft)}
+.tab{padding:.5rem 1rem;border-radius:10px;font-weight:700;font-size:.85rem;color:#cfe0f5;transition:.15s}
+.tab.act{background:#fff;color:#12335c}
+.tab:not(.act):hover{background:rgba(255,255,255,.12)}
+.pill{padding:.15rem .6rem;border-radius:99px;font-size:.7rem;font-weight:700;white-space:nowrap}
+.p-sb{background:#d6f3e6;color:#0b6b46}.p-b{background:#d9e8fb;color:#154a8f}.p-c{background:#fbeccb;color:#7a5200}.p-k{background:#fbdada;color:#9b2323}
+.dark .p-sb{background:#0f3d2e;color:#7ee2b4}.dark .p-b{background:#143258;color:#9cc7fa}.dark .p-c{background:#4a3a10;color:#f6d681}.dark .p-k{background:#4d1c1c;color:#f7a3a3}
+.bar{height:10px;border-radius:99px;background:var(--soft);overflow:hidden}.bar>i{display:block;height:100%;border-radius:99px;transition:width .6s}
+.hide{display:none!important}
+.dd{position:absolute;left:0;right:0;top:100%;margin-top:4px;background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 30px rgba(0,0,0,.18);z-index:20;max-height:12rem;overflow:auto}
+.dd div{padding:.6rem .8rem;font-size:.85rem;cursor:pointer}.dd div:hover{background:var(--soft)}
+.fade{animation:f .25s ease}@keyframes f{from{opacity:0;transform:translateY(6px)}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+th{font-size:.72rem;color:var(--mute);text-align:left;padding:.75rem;font-weight:700}td{padding:.75rem;font-size:.82rem;border-top:1px solid var(--line)}
+</style>
+</head>
+<body class="min-h-screen">
+
+<header style="background:linear-gradient(120deg,#0c2747,#12335c 60%,#0f6a74)" class="text-white sticky top-0 z-30 shadow-lg">
+  <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+    <div class="flex items-center gap-3">
+      <div class="w-11 h-11 rounded-xl grid place-items-center" style="background:rgba(255,255,255,.12)"><i class="fa-solid fa-anchor text-xl" style="color:var(--brass)"></i></div>
+      <div>
+        <h1 class="font-extrabold text-base leading-tight">SMA Negeri Taruna Nala Jawa Timur</h1>
+        <p class="text-xs text-blue-200">Penilaian dan pemantauan kinerja OB &amp; Gardener</p>
+      </div>
+    </div>
+    <nav class="flex items-center gap-1.5">
+      <button class="tab act" id="tab-eval" onclick="switchTab('eval')"><i class="fa-solid fa-pen-to-square mr-1"></i>Penilaian</button>
+      <button class="tab" id="tab-dash" onclick="switchTab('dash')"><i class="fa-solid fa-chart-line mr-1"></i>Dashboard</button>
+      <button class="tab" id="tab-history" onclick="switchTab('history')"><i class="fa-solid fa-clock-rotate-left mr-1"></i>Riwayat <span id="history-count" class="pill" style="background:rgba(255,255,255,.2)">0</span></button>
+      <button class="tab" onclick="toggleTheme()" aria-label="Ganti tema"><i id="theme-icon" class="fa-solid fa-moon"></i></button>
+    </nav>
+  </div>
+</header>
+
+<main class="max-w-6xl mx-auto px-4 py-6">
+
+<!-- PENILAIAN -->
+<section id="view-eval" class="space-y-5 fade">
+  <div class="card px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+    <div class="flex items-center gap-2 text-sm font-semibold">
+      <span class="relative flex h-2.5 w-2.5"><span id="sync-ping" class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style="background:var(--r3)"></span><span id="sync-dot" class="relative inline-flex rounded-full h-2.5 w-2.5" style="background:var(--r3)"></span></span>
+      <span>Database: <span id="sync-status">Menghubungkan...</span></span>
+      <span class="text-xs font-normal" style="color:var(--mute)" id="sync-time"></span>
+    </div>
+    <button class="btn btn-ghost" onclick="fetchMasterData(true)"><i id="sync-icon" class="fa-solid fa-arrows-rotate"></i>Sinkronkan</button>
+  </div>
+
+  <div class="card p-5 space-y-5">
+    <div class="grid md:grid-cols-3 gap-5">
+      <div>
+        <span class="lbl">Yang dinilai</span>
+        <div class="grid grid-cols-2 gap-2 p-1 rounded-xl" style="background:var(--soft)">
+          <button id="btn-role-OB" onclick="setRole('OB')" class="btn justify-center"><i class="fa-solid fa-broom"></i>Office Boy</button>
+          <button id="btn-role-GARDENER" onclick="setRole('GARDENER')" class="btn justify-center"><i class="fa-solid fa-leaf"></i>Gardener</button>
+        </div>
+      </div>
+      <div class="relative">
+        <label class="lbl" for="evaluator-input">Nama penilai <span style="color:var(--r1)">*</span></label>
+        <input id="evaluator-input" class="inp" autocomplete="off" placeholder="Ketik atau pilih nama penilai" onfocus="showDD('evaluator')" oninput="showDD('evaluator')">
+        <div id="evaluator-dd" class="dd hide"></div>
+      </div>
+      <div class="relative">
+        <label class="lbl" for="target-input">Nama <span id="label-target-role">OB</span> <span style="color:var(--r1)">*</span></label>
+        <input id="target-input" class="inp" autocomplete="off" placeholder="Ketik atau pilih nama petugas" onfocus="showDD('target')" oninput="showDD('target')">
+        <div id="target-dd" class="dd hide"></div>
+      </div>
+    </div>
+    <div class="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs" style="color:var(--mute)">
+      <span class="font-semibold" style="color:var(--ink)">Skala nilai (awal: 2)</span>
+      <span><i class="fa-solid fa-circle" style="color:var(--r1)"></i> 1 Kurang</span>
+      <span><i class="fa-solid fa-circle" style="color:var(--r2)"></i> 2 Cukup</span>
+      <span><i class="fa-solid fa-circle" style="color:var(--r3)"></i> 3 Baik</span>
+    </div>
+  </div>
+
+  <div id="checklist" class="space-y-5"></div>
+
+  <div class="card p-4 sticky bottom-3 z-10 flex flex-wrap items-center justify-between gap-4" style="box-shadow:0 14px 40px rgba(10,30,60,.22)">
+    <div class="flex items-center gap-4">
+      <svg width="64" height="64" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="27" fill="none" stroke="var(--soft)" stroke-width="7"/><circle id="ring" cx="32" cy="32" r="27" fill="none" stroke="var(--sea)" stroke-width="7" stroke-linecap="round" stroke-dasharray="169.6" stroke-dashoffset="169.6" transform="rotate(-90 32 32)" style="transition:stroke-dashoffset .5s,stroke .3s"/></svg>
+      <div>
+        <div class="disp text-2xl font-extrabold leading-none"><span id="score-percent">0</span>%</div>
+        <div class="text-xs mt-1" style="color:var(--mute)">Skor <b id="score-total">0 / 0</b></div>
+      </div>
+      <span id="score-predicate" class="pill">-</span>
+    </div>
+    <div class="flex gap-2 w-full sm:w-auto">
+      <button type="button" class="btn btn-ghost flex-1 justify-center" onclick="resetForm()"><i class="fa-solid fa-rotate-left"></i>Reset</button>
+      <button type="button" id="submit-btn" class="btn btn-pri flex-1 justify-center" onclick="submitForm()"><i class="fa-solid fa-paper-plane"></i><span>Simpan penilaian</span></button>
+    </div>
+  </div>
+</section>
+
+<!-- DASHBOARD -->
+<section id="view-dash" class="hide space-y-5">
+  <div class="flex flex-wrap items-center justify-between gap-3">
+    <h2 class="text-xl font-extrabold">Ringkasan kinerja</h2>
+    <select id="dash-role" class="inp" style="width:auto" onchange="renderDash()"><option value="ALL">Semua peran</option><option value="OB">Office Boy</option><option value="GARDENER">Gardener</option></select>
+  </div>
+  <div id="kpis" class="grid grid-cols-2 lg:grid-cols-4 gap-4"></div>
+  <div class="grid lg:grid-cols-5 gap-5">
+    <div class="card p-5 lg:col-span-3"><h3 class="font-bold mb-3">Tren nilai terbaru</h3><div id="trend"></div></div>
+    <div class="card p-5 lg:col-span-2"><h3 class="font-bold mb-3">Sebaran predikat</h3><div id="dist" class="space-y-3"></div></div>
+  </div>
+  <div class="card p-5"><h3 class="font-bold mb-3">Rata-rata nilai per petugas</h3><div id="rank" class="space-y-3"></div></div>
+</section>
+
+<!-- RIWAYAT -->
+<section id="view-history" class="hide">
+  <div class="card p-5 space-y-4">
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <div><h2 class="text-lg font-extrabold">Riwayat penilaian</h2><p class="text-xs" style="color:var(--mute)">Tersimpan di perangkat ini dan dikirim ke spreadsheet</p></div>
+      <div class="flex gap-2"><button class="btn btn-ghost" onclick="fetchHistory(true)"><i id="hist-icon" class="fa-solid fa-arrows-rotate"></i>Muat ulang</button><button class="btn btn-ghost" onclick="exportCSV()"><i class="fa-solid fa-file-csv" style="color:var(--r3)"></i>Ekspor CSV</button><button class="btn btn-ghost" style="color:var(--r1)" onclick="clearHistory()"><i class="fa-solid fa-trash"></i>Hapus semua</button></div>
+    </div>
+    <div class="grid sm:grid-cols-3 gap-3">
+      <input id="history-search" class="inp" placeholder="Cari nama penilai atau petugas" oninput="renderHistory()">
+      <select id="history-role" class="inp" onchange="renderHistory()"><option value="ALL">Semua peran</option><option value="OB">Office Boy</option><option value="GARDENER">Gardener</option></select>
+      <label class="inp flex items-center gap-2 cursor-pointer"><input type="checkbox" id="history-notes" onchange="renderHistory()"> Hanya yang ada catatan</label>
+    </div>
+    <div class="overflow-x-auto"><table class="w-full"><thead><tr><th>Waktu</th><th>Penilai</th><th>Petugas</th><th>Peran</th><th class="text-center">Skor</th><th class="text-center">Nilai</th><th class="text-center">Predikat</th><th>Catatan</th><th></th></tr></thead><tbody id="history-body"></tbody></table></div>
+  </div>
+</section>
+</main>
+
+<div id="modal" class="hide fixed inset-0 z-50 grid place-items-center p-4" style="background:rgba(8,18,32,.6);backdrop-filter:blur(4px)" onclick="if(event.target===this)closeModal()">
+  <div class="card w-full max-w-2xl max-h-[85vh] flex flex-col overflow-hidden fade">
+    <div class="p-4 flex justify-between items-center" style="border-bottom:1px solid var(--line)"><h3 class="font-bold" id="modal-title"></h3><button onclick="closeModal()" aria-label="Tutup"><i class="fa-solid fa-xmark text-lg"></i></button></div>
+    <div class="p-5 overflow-y-auto space-y-3" id="modal-content"></div>
+  </div>
+</div>
+
+<div id="toast" class="fixed left-1/2 -translate-x-1/2 bottom-24 z-[60] hide px-4 py-3 rounded-xl text-sm font-semibold text-white shadow-xl" role="status"></div>
+
+<script>
+const WEBHOOK = "https://script.google.com/macros/s/AKfycbzm-avMQXPJJdyLePf46zZNJ5KcgFpfQ_fbA6Q3K-HA4RZp6FTYPEE6IFi4sdLPlO5b/exec";
+const CHECKLIST_DATA = {
+  OB: [
+    {category:"MEBELER",items:["Meja (permukaan dan bagian bawah) bersih dan bebas dari debu","Kursi bersih dan bebas dari debu","Lemari (bagian dalam, luar, dan atas) bersih dan bebas dari debu","Papan tulis + bingkainya bersih dan bebas dari debu"]},
+    {category:"RUANG",items:["Lantai bersih dan bebas dari debu serta tidak licin","Kaca jendela + kusen bersih dan bebas dari debu","Sudut-sudut ruang bersih dan bebas dari debu","Plafon bersih dan terbebas dari sarang laba-laba","Mengosongkan dan membersihkan tempat sampah","Koridor dan selasar bebas dari debu serta tidak licin","Tangga bebas dari debu serta tidak licin"]},
+    {category:"KAMAR MANDI DAN WASTAFEL",items:["Toilet bagian dalam bersih dan tidak licin","Kloset bersih dan tidak berbau","Wastafel, kran air, dan area bawah wastafel bersih serta tidak berdebu","Cermin dan dinding area wastafel bersih","Mengosongkan dan membersihkan tempat sampah","Saluran air bersih dan memastikan tidak tersumbat","Air dan perlengkapan toilet tersedia"]},
+    {category:"TANAMAN / BUNGA",items:["Tanaman sehat; tidak layu (disiram rutin)","Memangkas tanaman yang terlalu rimbun/menjalar","Tanaman di pot bersih dari rumput","Daun kuning di pot tidak ada"]}
+  ],
+  GARDENER: [
+    {category:"TAMAN & AREA OUTDOOR (TUGAS RUTIN)",items:["Menyapu seluruh area taman","Mengumpulkan daun kering dan sampah","Membersihkan sudut taman dan area di bawah tanaman","Membersihkan area sekitar pot","Menyiram tanaman sesuai kebutuhan","Memeriksa tanaman layu/mati dan melaporkan kebutuhan penggantian","Memberi pupuk pada tanaman sesuai kebutuhan","Memangkas tanaman yang terlalu rimbun/menjalar","Membersihkan gulma dan rumput liar","Merapikan rumput dan tanaman","Membersihkan pot dari kotoran/lumut","Membersihkan area sekitar pohon, tiang, bangunan, dan fasilitas luar","Melaporkan pohon/cabang/tanaman yang berpotensi membahayakan","Memeriksa dan membersihkan sampah pada saluran drainase","Membersihkan seluruh lapangan dari sampah dan daun","Membersihkan pinggir lapangan dan sudut-sudutnya"]},
+    {category:"HASIL KEBERSIHAN & TATA RUANG OUTDOOR",items:["Area taman dan lingkungan bersih dari daun kering dan sampah","Area taman dan lingkungan bebas dari rumput liar","Tanaman dan bunga di taman terlihat segar dan tumbuh subur","Tanaman dan bunga tertata rapi","Tanaman dan bunga tidak ada yang mati","Tanaman dan bunga tidak tumbuh berlebihan/menjalar (tidak rapi)"]}
+  ]
+};
+let master = {evaluators:["Ahmad Fauzi, S.Pd.","Siti Nurhaliza, M.Pd.","Budi Santoso, S.ST."],ob:["Slamet Supriyadi","Joko Widodo","Suparman"],gardener:["Bambang Sugeng","Sutrisno","Karsiman"]};
+let role="OB", history=[], answers={};
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const pred=p=>p>=85?["Sangat Baik","p-sb","#1f9d6b"]:p>=70?["Baik","p-b","#3b82d6"]:p>=55?["Cukup","p-c","#e0a528"]:["Kurang","p-k","#dc4a4a"];
+const tsOf=h=>h.ts||parseInt(String(h.id).replace("EVAL-",""))||0;
+
+function toast(msg,type){const t=$("toast");t.textContent=msg;t.style.background=type==="err"?"#c0392b":type==="warn"?"#b7791f":"#0f6a5e";t.classList.remove("hide");clearTimeout(t._t);t._t=setTimeout(()=>t.classList.add("hide"),3200)}
+function toggleTheme(){const d=document.documentElement.classList.toggle("dark");$("theme-icon").className="fa-solid "+(d?"fa-sun":"fa-moon");try{localStorage.setItem("smala_theme",d?"d":"l")}catch(e){}}
+
+function switchTab(t){
+  ["eval","dash","history"].forEach(k=>{$("view-"+k).classList.toggle("hide",k!==t);$("tab-"+k).classList.toggle("act",k===t)});
+  if(t==="dash")renderDash(); if(t==="history"){renderHistory();fetchHistory()}
+  scrollTo({top:0,behavior:"smooth"});
+}
+
+function paintRole(){
+  ["OB","GARDENER"].forEach(r=>{const b=$("btn-role-"+r),on=r===role;b.style.background=on?"var(--pri)":"transparent";b.style.color=on?"#fff":"var(--mute)"});
+  $("label-target-role").textContent=role==="OB"?"OB":"Gardener";
+}
+function setRole(r){role=r;paintRole();$("target-input").value="";renderChecklist()}
+
+function fieldsOf(r){const out=[];let n=0;CHECKLIST_DATA[r].forEach((c,ci)=>c.items.forEach((it,ii)=>out.push({key:`${ci}_${ii}`,ci,label:it,cat:c.category,n:++n})));return out}
+
+function renderChecklist(){
+  answers={};
+  const box=$("checklist");box.innerHTML="";
+  let n=0;
+  CHECKLIST_DATA[role].forEach((c,ci)=>{
+    const el=document.createElement("div");el.className="card p-5 space-y-3 fade";
+    let h=`<div class="flex flex-wrap items-center justify-between gap-2 pb-3" style="border-bottom:1px solid var(--line)">
+      <div><h3 class="font-bold">${esc(c.category)}</h3><p class="text-xs" style="color:var(--mute)">${c.items.length} indikator, rata-rata <b id="avg-${ci}">2.0</b></p></div>
+      <div class="flex gap-1.5 text-xs"><span style="color:var(--mute)" class="self-center">Isi semua:</span>
+      ${[1,2,3].map(v=>`<button type="button" class="btn btn-ghost" style="padding:.3rem .7rem" onclick="setCat(${ci},${v})">${v}</button>`).join("")}</div></div>`;
+    c.items.forEach((it,ii)=>{
+      n++;const k=`${ci}_${ii}`;answers[k]=2;
+      h+=`<div class="p-3 rounded-xl space-y-2" style="background:var(--soft)">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+          <p class="text-sm font-semibold md:max-w-xl"><span style="color:var(--mute)">${n}.</span> ${esc(it)}</p>
+          <div class="flex gap-1.5 shrink-0 md:w-48">${[1,2,3].map(v=>`<button type="button" class="rate" data-k="${k}" data-v="${v}" onclick="rate('${k}',${v})">${v}</button>`).join("")}</div>
+        </div>
+        <input id="note_${k}" class="inp" style="background:var(--card);font-size:.8rem;padding:.4rem .7rem" placeholder="Catatan (opsional)"></div>`;
+    });
+    el.innerHTML=h;box.appendChild(el);
+  });
+  paintRates();calc();
+}
+function paintRates(){document.querySelectorAll(".rate").forEach(b=>{const on=answers[b.dataset.k]==b.dataset.v;b.className="rate"+(on?" on"+b.dataset.v:"")})}
+function rate(k,v){answers[k]=v;paintRates();calc()}
+function setCat(ci,v){Object.keys(answers).filter(k=>k.startsWith(ci+"_")).forEach(k=>answers[k]=v);paintRates();calc()}
+
+function calc(){
+  const f=fieldsOf(role),max=f.length*3,tot=f.reduce((s,x)=>s+(answers[x.key]||0),0);
+  const p=max?+((tot/max)*100).toFixed(1):0,[nm,cls,col]=pred(p);
+  $("score-total").textContent=`${tot} / ${max}`;$("score-percent").textContent=p;
+  const pe=$("score-predicate");pe.textContent=nm;pe.className="pill "+cls;
+  const r=$("ring");r.style.strokeDashoffset=169.6*(1-p/100);r.style.stroke=col;
+  CHECKLIST_DATA[role].forEach((c,ci)=>{const ks=f.filter(x=>x.ci===ci);const a=ks.reduce((s,x)=>s+answers[x.key],0)/ks.length;const e=$("avg-"+ci);if(e)e.textContent=a.toFixed(1)});
+  return {tot,max,p,nm};
+}
+function resetForm(){$("target-input").value="";renderChecklist()}
+
+async function submitForm(){
+  const ev=$("evaluator-input").value.trim(),tg=$("target-input").value.trim();
+  if(!ev){toast("Isi nama penilai terlebih dahulu","warn");$("evaluator-input").focus();return}
+  if(!tg){toast("Isi nama petugas terlebih dahulu","warn");$("target-input").focus();return}
+  const s=calc(),now=Date.now();
+  const rec={id:"EVAL-"+now,ts:now,timestamp:new Date(now).toLocaleString("id-ID"),evaluator:ev,targetName:tg,role,totalScore:s.tot,maxPossible:s.max,percentage:s.p,predicate:s.nm,
+    scores:fieldsOf(role).map(x=>({category:x.cat,label:x.label,score:answers[x.key],note:$("note_"+x.key).value.trim()}))};
+  history.unshift(rec);saveHistory();badge();
+  const b=$("submit-btn");b.disabled=true;b.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i><span>Mengirim...</span>';
+  try{await fetch(WEBHOOK,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/json"},body:JSON.stringify(rec)});toast(`Penilaian ${tg} tersimpan dan terkirim ke spreadsheet`)}
+  catch(e){toast("Tersimpan di perangkat. Gagal terhubung ke spreadsheet","warn")}
+  b.disabled=false;b.innerHTML='<i class="fa-solid fa-paper-plane"></i><span>Simpan penilaian</span>';
+  resetForm();
+}
+
+/* Dropdown nama */
+function showDD(t){
+  const q=$(t+"-input").value.toLowerCase(),list=t==="evaluator"?master.evaluators:(role==="OB"?master.ob:master.gardener);
+  const f=list.filter(x=>x.toLowerCase().includes(q)),d=$(t+"-dd");
+  d.innerHTML=f.length?f.map(n=>`<div data-n="${esc(n)}" onclick="pick('${t}',this.dataset.n)">${esc(n)}</div>`).join(""):`<div style="color:var(--mute);cursor:default">Tidak ditemukan. Nama baru tetap bisa diketik.</div>`;
+  d.classList.remove("hide");
+}
+function pick(t,n){$(t+"-input").value=n;$(t+"-dd").classList.add("hide")}
+document.addEventListener("click",e=>["evaluator","target"].forEach(t=>{if(!e.target.closest("#"+t+"-input")&&!e.target.closest("#"+t+"-dd"))$(t+"-dd").classList.add("hide")}));
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal()});
+
+/* Sinkronisasi */
+async function fetchMasterData(manual){
+  const ic=$("sync-icon"),st=$("sync-status"),dot=$("sync-dot"),ping=$("sync-ping");ic.classList.add("fa-spin");
+  try{
+    const d=await (await fetch(WEBHOOK)).json();
+    if(d.status==="success"){
+      if(d.penilai&&d.penilai.length)master.evaluators=d.penilai;
+      if(d.ob&&d.ob.length)master.ob=d.ob;
+      if(d.gardener&&d.gardener.length)master.gardener=d.gardener;
+      st.textContent="Terhubung real-time";dot.style.background=ping.style.background="var(--r3)";
+      $("sync-time").textContent="Terakhir "+new Date().toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"});
+      if(manual)toast("Data nama berhasil diperbarui");
+    }
+  }catch(e){st.textContent="Mode offline (data lokal)";dot.style.background=ping.style.background="var(--r2)";if(manual)toast("Tidak bisa terhubung. Memakai data lokal","warn")}
+  ic.classList.remove("fa-spin");
+}
+
+/* Riwayat */
+let deleted=[];
+function saveHistory(){try{localStorage.setItem("smala_eval_history",JSON.stringify(history));localStorage.setItem("smala_deleted",JSON.stringify(deleted))}catch(e){}}
+function loadHistory(){try{history=JSON.parse(localStorage.getItem("smala_eval_history")||"[]");deleted=JSON.parse(localStorage.getItem("smala_deleted")||"[]")}catch(e){history=[];deleted=[]}}
+function badge(){$("history-count").textContent=history.length}
+const notesOf=h=>(h.scores||[]).filter(s=>s.note);
+const catOf=l=>{for(const r in CHECKLIST_DATA)for(const c of CHECKLIST_DATA[r])if(c.items.includes(l))return c.category;return "LAINNYA"};
+
+async function fetchHistory(manual){
+  const ic=$("hist-icon");ic.classList.add("fa-spin");
+  try{
+    const d=await (await fetch(WEBHOOK+"?action=history")).json();
+    if(d.status==="success"&&Array.isArray(d.history)){
+      const map={};history.forEach(h=>map[h.id]=h);
+      d.history.forEach(h=>{if(!deleted.includes(h.id))map[h.id]=h});
+      history=Object.values(map).sort((a,b)=>tsOf(b)-tsOf(a));
+      saveHistory();badge();renderHistory();
+      if(manual)toast(`Riwayat diperbarui: ${history.length} penilaian`);
+    }else if(manual)toast("Server belum mengirim riwayat. Pasang kode Apps Script versi terbaru","warn");
+  }catch(e){if(manual)toast("Tidak bisa mengambil riwayat dari spreadsheet","warn")}
+  ic.classList.remove("fa-spin");
+}
+function clearHistory(){if(confirm("Hapus seluruh riwayat dari perangkat ini? Data di spreadsheet tidak ikut terhapus.")){deleted=[...new Set([...deleted,...history.map(h=>h.id)])];history=[];saveHistory();badge();renderHistory()}}
+function delOne(id){if(confirm("Hapus penilaian ini dari perangkat? Data di spreadsheet tidak ikut terhapus.")){deleted.push(id);history=history.filter(h=>h.id!==id);saveHistory();badge();renderHistory()}}
+
+function renderHistory(){
+  const q=$("history-search").value.toLowerCase(),rf=$("history-role").value,onlyN=$("history-notes").checked;
+  const f=history.filter(h=>(h.evaluator.toLowerCase().includes(q)||h.targetName.toLowerCase().includes(q))&&(rf==="ALL"||h.role===rf)&&(!onlyN||notesOf(h).length));
+  $("history-body").innerHTML=f.length?f.map(h=>{const pc=pred(+h.percentage)[1],ns=notesOf(h);return`<tr>
+    <td style="color:var(--mute)" class="whitespace-nowrap">${esc(h.timestamp)}</td><td>${esc(h.evaluator)}</td><td class="font-bold">${esc(h.targetName)}</td>
+    <td><span class="pill ${h.role==="OB"?"p-b":"p-sb"}">${h.role==="OB"?"OB":"Gardener"}</span></td>
+    <td class="text-center">${h.totalScore}/${h.maxPossible}</td><td class="text-center font-bold">${h.percentage}%</td>
+    <td class="text-center"><span class="pill ${pc}">${esc(h.predicate)}</span></td>
+    <td style="max-width:240px">${ns.length?`<span class="pill p-c"><i class="fa-solid fa-comment-dots"></i> ${ns.length} catatan</span><div class="text-xs truncate mt-1" style="color:var(--mute)" title="${esc(ns[0].note)}">${esc(ns[0].note)}</div>`:`<span style="color:var(--mute)">-</span>`}</td>
+    <td class="whitespace-nowrap text-right"><button class="btn btn-ghost" style="padding:.3rem .6rem" onclick="detail('${esc(h.id)}')" aria-label="Detail"><i class="fa-solid fa-eye"></i></button> <button class="btn btn-ghost" style="padding:.3rem .6rem;color:var(--r1)" onclick="delOne('${esc(h.id)}')" aria-label="Hapus"><i class="fa-solid fa-trash"></i></button></td></tr>`}).join(""):
+    `<tr><td colspan="9" class="text-center" style="color:var(--mute);padding:2rem">${history.length?"Tidak ada data yang cocok dengan filter.":"Belum ada penilaian. Mulai dari tab Penilaian."}</td></tr>`;
+}
+
+function detail(id){
+  const h=history.find(x=>x.id===id);if(!h)return;
+  $("modal-title").textContent=`${h.targetName} (${h.role==="OB"?"OB":"Gardener"})`;
+  const sc=v=>v===3?"p-sb":v===2?"p-c":"p-k",ns=notesOf(h),groups={};
+  h.scores.forEach((s,i)=>{(groups[s.category||catOf(s.label)]=groups[s.category||catOf(s.label)]||[]).push({...s,n:i+1})});
+  $("modal-content").innerHTML=`<div class="grid grid-cols-2 gap-3 p-4 rounded-xl text-sm" style="background:var(--soft)">
+    <div><span class="lbl">Penilai</span><b>${esc(h.evaluator)}</b></div><div><span class="lbl">Waktu</span><b>${esc(h.timestamp)}</b></div>
+    <div><span class="lbl">Skor</span><b>${h.totalScore} / ${h.maxPossible} (${h.percentage}%)</b></div><div><span class="lbl">Predikat</span><b>${esc(h.predicate)}</b></div></div>`+
+    (ns.length?`<div class="p-4 rounded-xl space-y-2" style="border:1.5px solid var(--brass)"><h4 class="font-bold text-sm"><i class="fa-solid fa-comment-dots" style="color:var(--brass)"></i> Ringkasan catatan (${ns.length})</h4>${ns.map(s=>`<div class="text-sm"><div class="text-xs" style="color:var(--mute)">${esc(s.label)} <span class="pill ${sc(s.score)}">${s.score}</span></div><div>${esc(s.note)}</div></div>`).join("")}</div>`:`<p class="text-sm" style="color:var(--mute)">Tidak ada catatan pada penilaian ini.</p>`)+
+    Object.keys(groups).map(c=>`<h4 class="font-bold text-sm pt-2">${esc(c)}</h4>`+groups[c].map(s=>`<div class="p-3 rounded-xl text-sm" style="border:1px solid var(--line)"><div class="flex justify-between gap-3"><span>${s.n}. ${esc(s.label)}</span><span class="pill ${sc(s.score)} h-fit">${s.score}</span></div>${s.note?`<p class="mt-2 text-xs italic" style="color:var(--mute)"><i class="fa-solid fa-comment-dots"></i> ${esc(s.note)}</p>`:""}</div>`).join("")).join("");
+  $("modal").classList.remove("hide");
+}
+function closeModal(){$("modal").classList.add("hide")}
+function exportCSV(){
+  if(!history.length){toast("Belum ada data untuk diekspor","warn");return}
+  const q=v=>`"${String(v).replace(/"/g,'""')}"`;
+  let csv="\ufeffID,Tanggal,Nama Penilai,Nama Petugas,Peran,Total Skor,Skor Maks,Nilai (%),Predikat,Catatan\n"+history.map(r=>[q(r.id),q(r.timestamp),q(r.evaluator),q(r.targetName),q(r.role),r.totalScore,r.maxPossible,r.percentage,q(r.predicate),q(notesOf(r).map(x=>x.label+": "+x.note).join(" | "))].join(",")).join("\n");
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8;"}));a.download=`Riwayat_Penilaian_${Date.now()}.csv`;a.click();
+}
+
+/* Dashboard */
+function renderDash(){
+  const rf=$("dash-role").value,d=history.filter(h=>rf==="ALL"||h.role===rf);
+  if(!d.length){["kpis","trend","dist","rank"].forEach(i=>$(i).innerHTML="");$("kpis").innerHTML=`<div class="card p-8 col-span-full text-center" style="color:var(--mute)">Belum ada data. Simpan penilaian pertama untuk melihat grafik di sini.</div>`;return}
+  const by={};d.forEach(h=>{const k=h.targetName+"|"+h.role;(by[k]=by[k]||{n:h.targetName,r:h.role,v:[]}).v.push(+h.percentage)});
+  const rank=Object.values(by).map(o=>({...o,avg:o.v.reduce((a,b)=>a+b,0)/o.v.length})).sort((a,b)=>b.avg-a.avg);
+  const avg=d.reduce((s,h)=>s+ +h.percentage,0)/d.length,low=rank.filter(r=>r.avg<55).length;
+  const kp=(ic,l,v,c)=>`<div class="card p-4"><i class="fa-solid ${ic}" style="color:${c}"></i><div class="disp text-2xl font-extrabold mt-2 truncate">${esc(v)}</div><div class="text-xs" style="color:var(--mute)">${l}</div></div>`;
+  $("kpis").innerHTML=kp("fa-clipboard-list","Total penilaian",d.length,"var(--sea)")+kp("fa-gauge-high","Rata-rata nilai",avg.toFixed(1)+"%",pred(avg)[2])+kp("fa-trophy","Nilai tertinggi",rank[0].n,"var(--brass)")+kp("fa-triangle-exclamation","Perlu perhatian",low+" petugas",low?"var(--r1)":"var(--r3)");
+  // tren
+  const t=[...d].sort((a,b)=>tsOf(a)-tsOf(b)).slice(-12),W=520,H=170,P=26,x=i=>P+(t.length>1?i*(W-2*P)/(t.length-1):(W-2*P)/2),y=v=>H-P-(v/100)*(H-2*P);
+  $("trend").innerHTML=`<svg viewBox="0 0 ${W} ${H}" class="w-full" role="img" aria-label="Grafik tren nilai">${[0,50,100].map(g=>`<line x1="${P}" x2="${W-P}" y1="${y(g)}" y2="${y(g)}" stroke="var(--line)"/><text x="2" y="${y(g)+4}" font-size="10" fill="var(--mute)">${g}</text>`).join("")}
+    <polyline fill="none" stroke="var(--sea)" stroke-width="2.5" stroke-linejoin="round" points="${t.map((h,i)=>x(i)+","+y(+h.percentage)).join(" ")}"/>
+    ${t.map((h,i)=>`<circle cx="${x(i)}" cy="${y(+h.percentage)}" r="4.5" fill="${pred(+h.percentage)[2]}" stroke="var(--card)" stroke-width="2"><title>${esc(h.targetName)}: ${h.percentage}%</title></circle>`).join("")}</svg>`;
+  // sebaran
+  const cnt={};d.forEach(h=>cnt[pred(+h.percentage)[0]]=(cnt[pred(+h.percentage)[0]]||0)+1);
+  $("dist").innerHTML=["Sangat Baik","Baik","Cukup","Kurang"].map(n=>{const c=cnt[n]||0,col=pred({ "Sangat Baik":90,Baik:75,Cukup:60,Kurang:0}[n])[2];return`<div><div class="flex justify-between text-sm mb-1"><span>${n}</span><b>${c}</b></div><div class="bar"><i style="width:${c/d.length*100}%;background:${col}"></i></div></div>`}).join("");
+  // peringkat
+  $("rank").innerHTML=rank.map((r,i)=>`<div class="flex items-center gap-3"><span class="w-6 text-xs font-bold" style="color:var(--mute)">${i+1}</span><div class="flex-1"><div class="flex justify-between text-sm mb-1"><span class="font-semibold">${esc(r.n)} <span class="pill ${r.role==="OB"?"p-b":"p-sb"}">${r.r==="OB"?"OB":"Gardener"}</span></span><span><b>${r.avg.toFixed(1)}%</b> <span class="text-xs" style="color:var(--mute)">(${r.v.length}x)</span></span></div><div class="bar"><i style="width:${r.avg}%;background:${pred(r.avg)[2]}"></i></div></div></div>`).join("");
+}
+
+window.addEventListener("DOMContentLoaded",()=>{
+  try{if(localStorage.getItem("smala_theme")==="d"){document.documentElement.classList.add("dark");$("theme-icon").className="fa-solid fa-sun"}}catch(e){}
+  loadHistory();badge();paintRole();renderChecklist();fetchMasterData();fetchHistory();setInterval(fetchMasterData,30000);
+});
+</script>
+</body>
+</html>
